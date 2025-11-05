@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"os"
 	// add in the imports once you have setup the routes directory and files
-	//"server/routes"
+	"server/routes"
 )
 
 func main() {
@@ -28,6 +28,7 @@ func main() {
 	 * Example of a route
 	 * router.POST("/order/create", routes.AddOrder)
 	 */
+	router.POST("/question/create", routes.AddQuestion)
 
 	// run the server and allow it to listen to requests
 	err := router.Run(":" + port)
