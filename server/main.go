@@ -1,11 +1,13 @@
 ﻿package main
 
 import (
+	"fmt"
+	"os"
+
+	"server/routes"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"os"
-	// add in the imports once you have setup the routes directory and files
-	"server/routes"
 )
 
 func main() {
@@ -13,8 +15,11 @@ func main() {
 	port := os.Getenv("PORT")
 
 	if port == "" {
-		port = "8000"
+		port = "8010"
 	}
+
+	// print out the port if you have received it
+	fmt.Println(port)
 
 	// gin is a web framework for Go - helps for API management
 	router := gin.New()
@@ -29,6 +34,7 @@ func main() {
 	 * router.POST("/order/create", routes.AddOrder)
 	 */
 	router.POST("/question/create", routes.AddQuestion)
+	router.DELETE("/question/delete", routes.DeleteQuestion)
 
 	// run the server and allow it to listen to requests
 	err := router.Run(":" + port)

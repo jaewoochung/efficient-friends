@@ -10,6 +10,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -47,4 +48,21 @@ func AddQuestion(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, result)
+}
+
+func DeleteQuestion(c *gin.Context) {
+	questionID := c.Params.ByName("id")
+	docID, _ := primitive.ObjectIDFromHex(questionID)
+
+	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+	result, err := questionCollection.DeleteOne(ctx, bson.M{"_id": docID})
+
+	defer cancel()
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, result.DeletedCount)
 }
